@@ -52,14 +52,12 @@ CREATE TABLE archivos (
     CONSTRAINT fk_archivos_folder FOREIGN KEY (folder_id) REFERENCES carpetas (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
 -- archivos_compartidos  (muchos a muchos usuario <-> archivo, con permiso)
--- ---------------------------------------------------------------------
 CREATE TABLE archivos_compartidos (
     id           BIGINT      NOT NULL AUTO_INCREMENT,
     file_id      BIGINT      NOT NULL,
-    shr_by_id    BIGINT      NOT NULL,             -- quién comparte (el dueño)
-    shr_with_id  BIGINT      NOT NULL,             -- con quién se comparte
+    shr_by_id    BIGINT      NOT NULL,             -- quien comparte (el dueño)
+    shr_with_id  BIGINT      NOT NULL,             -- con quien se comparte
     perm         VARCHAR(10) NOT NULL DEFAULT 'view',   -- 'view' (lectura) | 'edit' (escritura)
     created_at   DATETIME(6) NOT NULL,
     PRIMARY KEY (id),
@@ -69,41 +67,17 @@ CREATE TABLE archivos_compartidos (
     CONSTRAINT fk_comp_with FOREIGN KEY (shr_with_id) REFERENCES usuarios (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
 -- enlaces_publicos  (tabla aparte: permite historial de enlaces revocados)
--- ---------------------------------------------------------------------
 CREATE TABLE enlaces_publicos (
     id            BIGINT      NOT NULL AUTO_INCREMENT,
     file_id       BIGINT      NOT NULL,
-    token         VARCHAR(64) NOT NULL,            -- aleatorio, va en la URL /p/<token>/
+    token         VARCHAR(64) NOT NULL,
     created_by_id BIGINT      NOT NULL,
     created_at    DATETIME(6) NOT NULL,
-    active        TINYINT(1)  NOT NULL DEFAULT 1,  -- 0 = revocado
+    active        TINYINT(1)  NOT NULL DEFAULT 1,
     revoked_at    DATETIME(6) NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_enlace_token (token),
     CONSTRAINT fk_enl_file FOREIGN KEY (file_id)       REFERENCES archivos (id) ON DELETE CASCADE,
     CONSTRAINT fk_enl_by   FOREIGN KEY (created_by_id) REFERENCES usuarios (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
-
--- =====================================================================
--- Consultas clave del diseño (referencia)
--- =====================================================================
--- Listado normal de una carpeta (SOLO lo NO eliminado):
---   SELECT * FROM carpetas WHERE owner_id = ? AND parent_id <=> ? AND eliminado = 0;
---   SELECT * FROM archivos WHERE owner_id = ? AND folder_id <=> ? AND eliminado = 0;
---
--- Papelera (lo contrario: eliminado = 1) mostrando solo la "raíz" de lo eliminado:
---   SELECT a.* FROM archivos a LEFT JOIN carpetas c ON c.id = a.folder_id
---   WHERE a.owner_id = ? AND a.eliminado = 1 AND (c.id IS NULL OR c.eliminado = 0);
---
--- ¿Puede el usuario U ver el archivo A?  (propiedad directa O compartición)
---   SELECT 1 FROM archivos a
---   WHERE a.id = ? AND a.eliminado = 0
---     AND (a.owner_id = ?
---          OR EXISTS (SELECT 1 FROM archivos_compartidos s
---                     WHERE s.file_id = a.id AND s.shr_with_id = ?));
---
--- Acceso público: enlace activo y archivo no eliminado
---   SELECT a.* FROM enlaces_publicos e JOIN archivos a ON a.id = e.file_id
---   WHERE e.token = ? AND e.active = 1 AND a.eliminado = 0;
