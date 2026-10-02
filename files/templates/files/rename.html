@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Renombrar carpeta · PoliDrive{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Renombrar carpeta</h1>
+<div class="panel">
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>{{ form.name.label }}</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </p>
+        <button type="submit" class="btn primary">Guardar</button>
+        <a href="{% if fold.parent_id %}{% url 'fold_det' fold.parent_id %}{% else %}{% url 'dash' %}{% endif %}" class="btn">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta · PoliDrive{% endblock %}
+
+{% block auth_content %}
+<div class="login-split reverse">
+
+    <div class="login-aside">
+        <div class="login-aside-body">
+            <h1 class="login-hero">Poli Drive</h1>
+            <p class="login-text">Crea tu cuenta pibe.</p>
+        </div>
+    </div>
+
+    <div class="login-main">
+        <div class="brand">Poli<span class="brand-mark">Drive</span></div>
+
+        <div class="login-box">
+            <h2>Crea tu cuenta</h2>
+            <p class="login-sub">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn primary login-btn">Crear cuenta</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

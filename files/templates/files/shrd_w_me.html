@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Compartido conmigo · PoliDrive{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Compartido conmigo</h1>
+
+{% if fl_shr %}
+<table class="file-table">
+    <thead>
+        <tr><th>Nombre</th><th>Compartido por</th><th>Permiso</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for s in fl_shr %}
+        <tr>
+            <td><span class="item-name"><span class="icon file-icon">&#128196;</span> {{ s.file.name }}</span></td>
+            <td>{{ s.shr_by.nombre }}</td>
+            <td>{{ s.get_perm_display }}</td>
+            <td>
+                <div class="row-actions">
+                    <a href="{% url 'dl_file' s.file.id %}" class="act-btn">Descargar</a>
+                    {% if s.perm == 'edit' %}<a href="{% url 'edit_fl' s.file.id %}" class="act-btn">Editar</a>{% endif %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">Todavía nadie ha compartido archivos contigo.</div>
+{% endif %}
+{% endblock %}

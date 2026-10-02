@@ -1,0 +1,367 @@
+:root {
+    --bg: #F7F2EB;
+    --sidebar: #F7F2EB;
+    --surface: #EAE2D6;
+    --surface-hover: #EEEEEE;
+    --paper: #EEEEEE;
+    --ink: #2E3328;
+    --ink-soft: #5F6454;
+    --line: #D9CFBF;
+    --accent: #8B9A6E;
+    --accent-ink: #1F2616;
+    --folder-icon: #8B9A6E;
+    --file-icon: #B0A187;
+    --danger: #B3463A;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Google Sans", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+}
+
+a { color: inherit; }
+
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: var(--sidebar);
+    padding: 1.2rem 0.8rem;
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.6rem 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--ink);
+}
+.brand .brand-mark { color: var(--accent); }
+
+.new-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--surface);
+    color: var(--ink);
+    border: none;
+    border-radius: 24px;
+    padding: 0.7rem 1.3rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 3px rgba(60,50,30,0.18);
+    width: fit-content;
+}
+.new-btn:hover { background: var(--surface-hover); }
+
+.new-menu { position: relative; }
+.new-menu-panel {
+    display: none;
+    position: absolute;
+    top: 110%; left: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.4rem;
+    min-width: 200px;
+    box-shadow: 0 4px 16px rgba(60,50,30,0.18);
+    z-index: 20;
+}
+.new-menu.open .new-menu-panel { display: block; }
+.new-menu-panel form { padding: 0.5rem; }
+.new-menu-panel input[type="text"] {
+    width: 100%; padding: 0.45rem 0.6rem; border: 1px solid var(--line); border-radius: 4px;
+    background: var(--bg); color: var(--ink); margin-bottom: 0.5rem;
+}
+.new-menu-item {
+    display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.7rem;
+    border-radius: 6px; font-size: 0.88rem; cursor: pointer; color: var(--ink);
+}
+.new-menu-item:hover { background: var(--surface-hover); }
+
+.sidenav { display: flex; flex-direction: column; gap: 0.1rem; margin-top: 0.4rem; }
+.sidenav a {
+    display: flex; align-items: center; gap: 0.9rem;
+    padding: 0.6rem 0.9rem; border-radius: 0 20px 20px 0;
+    text-decoration: none; color: var(--ink); font-size: 0.88rem;
+}
+.sidenav a .icon { width: 1.2em; text-align: center; color: var(--ink-soft); }
+.sidenav a:hover { background: var(--surface-hover); }
+.sidenav a.active { background: #DDE3CE; font-weight: 500; }
+.sidenav a.active .icon { color: var(--accent); }
+
+.storage-box { margin-top: auto; padding: 0.9rem 0.9rem 0.2rem; font-size: 0.78rem; color: var(--ink-soft); }
+.storage-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-bottom: 0.5rem; }
+.storage-bar-fill { height: 100%; background: var(--accent); }
+
+/* la madre de arriba, la barrita */
+.topbar {
+    display: flex; align-items: center; gap: 1.5rem;
+    padding: 0.8rem 1.6rem; border-bottom: 1px solid var(--line);
+}
+.search-form { flex: 1; max-width: 720px; }
+.search-box {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: var(--surface); border-radius: 24px; padding: 0.6rem 1.1rem;
+}
+.search-box input {
+    background: none; border: none; outline: none; color: var(--ink);
+    font-size: 0.92rem; width: 100%;
+}
+.search-box .icon { color: var(--ink-soft); }
+
+.account { margin-left: auto; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: var(--ink-soft); }
+.avatar-badge {
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
+    display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem;
+}
+.link-button {
+    background: none; border: none; color: var(--ink-soft); cursor: pointer; font-size: 0.82rem;
+    text-decoration: underline; padding: 0;
+}
+
+/* lo de adentro */
+.content { flex: 1; padding: 1.6rem 2rem; max-width: 1200px; }
+
+.page-title { font-size: 1.4rem; font-weight: 400; margin: 0 0 1rem; }
+
+.messages { list-style: none; padding: 0; margin: 0 0 1.2rem; }
+.message {
+    padding: 0.6rem 1rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: 0.88rem;
+    background: #DDE3CE; color: #3F4A2A;
+}
+.message.error { background: #F3DAD5; color: var(--danger); }
+.message.warning { background: #F4E7C4; color: #7A5C14; }
+
+.breadcrumbs { font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 1.2rem; }
+.breadcrumbs a { text-decoration: none; }
+.breadcrumbs a:hover { text-decoration: underline; color: var(--ink); }
+
+.section-heading {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 1.4rem 0 0.7rem; font-size: 0.82rem; color: var(--ink-soft); font-weight: 500;
+}
+.view-toggle { display: flex; gap: 0.2rem; }
+.view-toggle button {
+    background: none; border: none; color: var(--ink-soft); cursor: pointer; padding: 0.3rem 0.5rem;
+    border-radius: 4px; font-size: 0.95rem;
+}
+.view-toggle button.active { color: var(--accent); background: var(--surface); }
+
+/* la barrita horizontal */
+.folder-chips { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.folder-chip {
+    display: flex; align-items: center; gap: 0.7rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 0.7rem 1rem; min-width: 220px; text-decoration: none; color: var(--ink);
+    font-size: 0.88rem;
+}
+.folder-chip:hover { background: var(--surface-hover); }
+.folder-chip .icon { color: var(--folder-icon); font-size: 1.1rem; }
+.folder-chip .chip-actions { margin-left: auto; display: flex; gap: 0.5rem; opacity: 0; }
+.folder-chip:hover .chip-actions { opacity: 1; }
+.folder-chip .chip-actions a { font-size: 0.78rem; color: var(--ink-soft); text-decoration: none; }
+.folder-chip .chip-actions a:hover { color: var(--accent); }
+
+/* las tarjetitas, se ve mamalon */
+.file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.file-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    text-decoration: none; color: var(--ink); display: flex; flex-direction: column;
+}
+.file-card:hover { border-color: var(--ink-soft); }
+.file-card .thumb {
+    background: var(--paper); height: 110px; display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: var(--file-icon);
+}
+.file-card .meta { padding: 0.6rem 0.8rem; }
+.file-card .fname { font-size: 0.85rem; font-weight: 500; margin-bottom: 0.3rem; word-break: break-word; }
+.file-card .fsub { font-size: 0.74rem; color: var(--ink-soft); }
+.file-card .fsub .avatar-dot {
+    display: inline-flex; width: 16px; height: 16px; border-radius: 50%; background: var(--accent);
+    color: var(--accent-ink); align-items: center; justify-content: center; font-size: 0.6rem; margin-right: 0.3rem;
+}
+.card-actions { display: flex; gap: 0.7rem; padding: 0 0.8rem 0.7rem; }
+.card-actions a { font-size: 0.76rem; color: var(--ink-soft); text-decoration: none; }
+.card-actions a:hover { color: var(--accent); }
+.card-actions a.danger:hover { color: var(--danger); }
+
+/* pa ver en forma de lista, nose pq si quito esto ya no jala */
+.file-grid.list-mode { display: block; }
+.file-grid.list-mode .file-card {
+    flex-direction: row; align-items: center; margin-bottom: 0.5rem; border-radius: 6px;
+}
+.file-grid.list-mode .thumb { height: auto; width: 48px; font-size: 1.2rem; align-self: stretch; }
+.file-grid.list-mode .meta { flex: 1; padding: 0.5rem 0.8rem; }
+.file-grid.list-mode .card-actions { padding: 0.5rem 1rem 0.5rem 0; }
+
+.empty-state { padding: 3rem 1rem; text-align: center; color: var(--ink-soft); font-size: 0.9rem; }
+
+/* papelera y compartidos */
+table.file-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+table.file-table th {
+    text-align: left; font-size: 0.76rem; color: var(--ink-soft);
+    padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); font-weight: 500;
+}
+table.file-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--line); font-size: 0.88rem; vertical-align: middle; }
+table.file-table tr:last-child td { border-bottom: none; }
+table.file-table tr:hover { background: var(--surface-hover); }
+
+.item-name { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--ink); }
+.item-name .icon { width: 1.1em; text-align: center; }
+.folder-icon { color: var(--folder-icon); }
+.file-icon { color: var(--file-icon); }
+
+.row-actions { display: flex; gap: 0.6rem; justify-content: flex-end; }
+.row-actions a, .row-actions button { font-size: 0.8rem; color: var(--ink-soft); text-decoration: none; background: none; border: none; cursor: pointer; }
+.row-actions a:hover, .row-actions button:hover { color: var(--accent); }
+.row-actions .danger:hover { color: var(--danger); }
+
+.btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink); text-decoration: none; font-size: 0.86rem; cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 500; }
+.btn.primary:hover { opacity: 0.9; color: var(--accent-ink); }
+
+/* el login */
+.auth-shell { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.auth-card {
+    width: 100%; max-width: 460px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 3rem;
+}
+.auth-card .brand { justify-content: center; padding: 0 0 1.6rem; font-size: 1.8rem; }
+.auth-card h1 { font-size: 1.4rem; margin: 0 0 1.6rem; text-align: center; font-weight: 400; color: var(--ink-soft); }
+.auth-card form p { margin: 0 0 1.3rem; }
+.auth-card label { display: block; font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0.45rem; }
+.auth-card input {
+    width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--line); border-radius: 6px; font-size: 1rem;
+    background: var(--bg); color: var(--ink);
+}
+.auth-card .btn { padding: 0.85rem 1rem; font-size: 1rem; }
+.auth-card .helptext, .auth-card ul.errorlist { font-size: 0.85rem; color: var(--ink-soft); list-style: none; padding: 0; }
+.auth-card ul.errorlist { color: var(--danger); }
+.auth-card .switch { margin-top: 1.6rem; font-size: 0.92rem; color: var(--ink-soft); text-align: center; }
+
+/* cumpartir */
+.share-list { list-style: none; padding: 0; margin-top: 1rem; }
+.share-list li { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--line); font-size: 0.88rem; }
+.modal-form input[type="text"], .modal-form select {
+    padding: 0.5rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; margin-right: 0.5rem;
+    background: var(--bg); color: var(--ink);
+}
+
+/* los botones */
+.act-form { display: inline; margin: 0; }
+.act-btn {
+    background: none; border: none; padding: 0; cursor: pointer; font-family: inherit;
+    font-size: 0.78rem; color: var(--ink-soft); text-decoration: none;
+}
+.act-btn:hover { color: var(--accent); }
+.act-btn.danger:hover { color: var(--danger); }
+.card-actions { flex-wrap: wrap; }
+.row-actions .act-btn { font-size: 0.8rem; }
+
+/* alch no me acuerdo que hace esta madre, pero se desalinea todo si lo quito, y si lo modifico no pasa nada */
+.folder-chip .chip-link {
+    display: flex; align-items: center; gap: 0.7rem; flex: 1;
+    text-decoration: none; color: var(--ink);
+}
+.folder-chip .chip-actions { align-items: center; }
+
+/* formularios de compartir y editar */
+.panel {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; max-width: 640px;
+}
+.panel-title { font-size: 1rem; font-weight: 500; margin: 0 0 1rem; }
+.panel-sub { font-size: 0.85rem; font-weight: 500; color: var(--ink-soft); margin: 1.4rem 0 0.3rem; }
+.panel p { margin: 0 0 1rem; }
+.panel label { display: block; font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 0.35rem; }
+.panel input[type="text"], .panel select {
+    padding: 0.5rem 0.6rem; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--bg); color: var(--ink); font-size: 0.9rem; min-width: 260px;
+}
+.panel input[type="file"] { color: var(--ink-soft); font-size: 0.85rem; }
+.panel ul.errorlist { color: var(--danger); list-style: none; padding: 0; margin: 0.3rem 0 0; font-size: 0.8rem; }
+.muted { color: var(--ink-soft); font-size: 0.86rem; }
+
+
+/* login pared verde con el formulario */
+.auth-shell { padding: 0; }
+.auth-shell main { width: 100%; max-width: none; position: relative; }
+.auth-shell .messages { position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 5; width: min(480px, 90%); margin: 0; }
+
+.login-split {
+    display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh;
+}
+
+/* lado verde */
+.login-aside {
+    position: relative; overflow: hidden; color: #fff;
+    background: linear-gradient(160deg, #7B8B5F 0%, #4E5B38 100%);
+    padding: 4rem 4.5rem 2.5rem; display: flex; flex-direction: column;
+}
+.login-aside::before, .login-aside::after {
+    content: ""; position: absolute; border-radius: 50%; pointer-events: none;
+}
+.login-aside::before { width: 480px; height: 480px; right: -160px; bottom: -150px; background: rgba(139,154,110,0.45); }
+.login-aside::after  { width: 240px; height: 240px; right: 110px; top: -70px; background: rgba(247,242,235,0.10); }
+.login-aside > * { position: relative; z-index: 1; }
+.login-aside-body { margin: auto 0; }
+.login-logo { width: 72px; height: 72px; color: #fff; margin-bottom: 1.6rem; }
+.login-hero { font-size: 5rem; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 1.4rem; }
+.login-text { font-size: 1.2rem; line-height: 1.5; max-width: 420px; margin: 0; color: #F7F2EB; }
+.login-copy { font-size: 0.88rem; color: rgba(247,242,235,0.8); }
+
+/* lado del formulario */
+.login-main { background: var(--bg); padding: 2.5rem 4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.login-main .brand { position: absolute; top: 2.4rem; left: 4rem; padding: 0; font-size: 1.5rem; }
+.login-box { width: 100%; max-width: 420px; }
+.login-box h2 { font-size: 2rem; font-weight: 700; margin: 0 0 0.5rem; }
+.login-sub { font-size: 0.92rem; line-height: 1.5; color: var(--ink-soft); margin: 0 0 2rem; }
+.login-sub a { color: var(--ink); font-weight: 600; }
+
+.login-form p { margin: 0 0 1.4rem; }
+.login-form label { display: block; font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 0.3rem; }
+.login-form input {
+    width: 100%; padding: 0.7rem 0.1rem; border: none; border-bottom: 2px solid var(--line);
+    border-radius: 0; background: transparent; color: var(--ink); font-size: 1rem; outline: none;
+}
+.login-form input:focus { border-bottom-color: var(--accent); }
+.login-form ul.errorlist {
+    list-style: none; padding: 0.6rem 0.9rem; margin: 0 0 1.2rem;
+    background: #F3DAD5; color: var(--danger); border-radius: 6px; font-size: 0.88rem;
+}
+.login-btn { width: 100%; padding: 0.9rem 1rem; font-size: 1rem; margin-top: 0.4rem; }
+
+@media (max-width: 800px) {
+    .login-split { grid-template-columns: 1fr; min-height: 0; }
+    .login-aside { padding: 2rem; }
+    .login-hero { font-size: 2.4rem; }
+    .login-main { padding: 2rem; }
+    .login-main .brand { display: none; }
+    .login-copy { margin-top: 1.5rem; }
+}
+
+
+/* igual que el login pero con el verde a la derecha */
+.login-split.reverse .login-aside { order: 2; }
+
+@media (max-width: 800px) {
+    .login-split.reverse .login-aside { order: 0; }
+}

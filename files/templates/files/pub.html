@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivo compartido · PoliDrive</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="auth-shell">
+    <div class="auth-card" style="text-align:center;">
+        <div class="brand">Poli<span class="brand-mark">Drive</span></div>
+        {% if lnk %}
+        <div style="font-size:3rem; margin:0.5rem 0;">&#128196;</div>
+        <h1 style="color:var(--ink); margin-bottom:0.3rem;">{{ lnk.file.name }}</h1>
+        <p class="muted">{{ lnk.file.size_disp }} &middot; compartido por {{ lnk.file.owner.nombre }}</p>
+        <a href="{% url 'pub_dl' lnk.token %}" class="btn primary" style="margin-top:0.8rem;">Descargar</a>
+        {% else %}
+        <h1>Enlace no disponible</h1>
+        <p class="muted">Este enlace no existe, fue desactivado o el archivo ya no está disponible.</p>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

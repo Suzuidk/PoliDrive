@@ -1,0 +1,1 @@
+<form method="post" action="{{ url }}" class="act-form"{% if confirm %} onsubmit="return confirm('{{ confirm }}');"{% endif %}>{% csrf_token %}<button type="submit" class="act-btn{% if cls %} {{ cls }}{% endif %}">{{ label }}</button></form>

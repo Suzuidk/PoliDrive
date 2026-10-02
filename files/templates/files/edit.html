@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Editar archivo · PoliDrive{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Editar "{{ fl.name }}"</h1>
+
+<div class="panel">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label>Nombre</label>
+            <input type="text" name="name" value="{{ fl.name }}" required style="width:100%;">
+        </p>
+        <p>
+            <label>Reemplazar contenido (opcional)</label>
+            <input type="file" name="upload">
+        </p>
+        {% if is_owner %}
+        <p>
+            <label>Mover a la carpeta</label>
+            <select name="dest">
+                <option value="" {% if not fl.folder_id %}selected{% endif %}>Mi unidad (raíz)</option>
+                {% for did, dlbl in dest_opts %}
+                <option value="{{ did }}" {% if did == fl.folder_id %}selected{% endif %}>{{ dlbl }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        {% endif %}
+        <button type="submit" class="btn primary">Guardar cambios</button>
+        <a href="{% if is_owner %}{% url 'dash' %}{% else %}{% url 'shrd_w_me' %}{% endif %}" class="btn">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

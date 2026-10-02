@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Papelera · PoliDrive{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Papelera</h1>
+<p style="color:var(--ink-soft); font-size:0.88rem; margin-top:-0.5rem;">
+    Al eliminar una carpeta, todo su contenido viene con ella y se restaura junto con ella.
+    "Eliminar definitivamente" borra el archivo real del almacenamiento y no se puede deshacer.
+</p>
+
+{% if folds or fls %}
+<table class="file-table">
+    <thead>
+        <tr><th>Nombre</th><th>Eliminado</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for fold in folds %}
+        <tr>
+            <td><span class="item-name"><span class="icon folder-icon">&#128193;</span> {{ fold.name }}</span></td>
+            <td>{{ fold.trash_at|date:"d M Y H:i" }}</td>
+            <td>
+                <div class="row-actions">
+                    {% url 'rest_fld' fold.id as u %}{% include 'files/_act.html' with url=u label='Restaurar' %}
+                    {% url 'del_fld_perm' fold.id as u %}{% include 'files/_act.html' with url=u label='Eliminar definitivamente' cls='danger' confirm='Se borrara la carpeta y TODO su contenido de forma definitiva. Continuar?' %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        {% for fl in fls %}
+        <tr>
+            <td><span class="item-name"><span class="icon file-icon">&#128196;</span> {{ fl.name }}</span></td>
+            <td>{{ fl.trash_at|date:"d M Y H:i" }}</td>
+            <td>
+                <div class="row-actions">
+                    {% url 'rest_fl' fl.id as u %}{% include 'files/_act.html' with url=u label='Restaurar' %}
+                    {% url 'del_fl_perm' fl.id as u %}{% include 'files/_act.html' with url=u label='Eliminar definitivamente' cls='danger' confirm='Se borrara el archivo de forma definitiva. Continuar?' %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">La papelera está vacía.</div>
+{% endif %}
+{% endblock %}

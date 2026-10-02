@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Mi unidad · PoliDrive{% endblock %}
+
+{% block content %}
+{% if search_q %}
+<h1 class="page-title">Resultados para "{{ search_q }}"</h1>
+{% else %}
+<div class="breadcrumbs">
+    <a href="{% url 'dash' %}">Mi unidad</a>
+    {% for crumb in crumbs %}
+        / <a href="{% url 'fold_det' crumb.id %}">{{ crumb.name }}</a>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if folds %}
+<div class="section-heading"><span>Carpetas</span></div>
+<div class="folder-chips">
+    {% for fold in folds %}
+    <div class="folder-chip">
+        <a class="chip-link" href="{% url 'fold_det' fold.id %}"><span class="icon">&#128193;</span> {{ fold.name }}</a>
+        <span class="chip-actions">
+            <a href="{% url 'ren_fold' fold.id %}" class="act-btn">Renombrar</a>
+            {% url 'trash_fld' fold.id as u %}{% include 'files/_act.html' with url=u label='Eliminar' cls='danger' %}
+        </span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="section-heading">
+    <span>Archivos</span>
+    <div class="view-toggle">
+        <button type="button" id="btnGrid" class="active" onclick="setViewMode('grid')">&#9638;</button>
+        <button type="button" id="btnList" onclick="setViewMode('list')">&#9776;</button>
+    </div>
+</div>
+
+{% if fls %}
+<div class="file-grid" id="fileGrid">
+    {% for fl in fls %}
+    <div class="file-card">
+        <a href="{% url 'dl_file' fl.id %}" class="thumb">&#128196;</a>
+        <div class="meta">
+            <div class="fname">{{ fl.name }}</div>
+            <div class="fsub"><span class="avatar-dot">{{ user.nombre|slice:":1"|upper }}</span>{{ fl.upl_at|date:"d M" }} · {{ fl.size_disp }}</div>
+        </div>
+        <div class="card-actions">
+            <a href="{% url 'dl_file' fl.id %}" class="act-btn">Descargar</a>
+            <a href="{% url 'shr_file' fl.id %}" class="act-btn">Compartir</a>
+            <a href="{% url 'edit_fl' fl.id %}" class="act-btn">Editar</a>
+            {% url 'trash_fl' fl.id as u %}{% include 'files/_act.html' with url=u label='Eliminar' cls='danger' %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    {% if not folds %}
+    <div class="empty-state">
+        {% if search_q %}No se encontró nada con ese nombre.{% else %}Esta carpeta está vacía. Usa "Nuevo" para subir archivos o crear una carpeta.{% endif %}
+    </div>
+    {% endif %}
+{% endif %}
+
+<script>
+function setViewMode(mode) {
+    var grid = document.getElementById('fileGrid');
+    var btnGrid = document.getElementById('btnGrid');
+    var btnList = document.getElementById('btnList');
+    if (!grid) return;
+    if (mode === 'list') {
+        grid.classList.add('list-mode'); btnList.classList.add('active'); btnGrid.classList.remove('active');
+    } else {
+        grid.classList.remove('list-mode'); btnGrid.classList.add('active'); btnList.classList.remove('active');
+    }
+    try { localStorage.setItem('polidrive_view_mode', mode); } catch (e) {}
+}
+(function () {
+    try { if (localStorage.getItem('polidrive_view_mode') === 'list') setViewMode('list'); } catch (e) {}
+})();
+</script>
+{% endblock %}

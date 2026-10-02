@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Compartir · PoliDrive{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Compartir "{{ fl.name }}"</h1>
+
+<div class="panel">
+    <h2 class="panel-title">Compartir con un usuario registrado</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>{{ form.email.label }}</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </p>
+        <p>
+            <label>{{ form.perm.label }}</label>
+            {{ form.perm }}
+        </p>
+        <button type="submit" class="btn primary">Compartir</button>
+    </form>
+
+    <h3 class="panel-sub">Personas con acceso</h3>
+    {% if shares %}
+    <ul class="share-list">
+        {% for s in shares %}
+        <li>
+            <span>{{ s.shr_with.nombre }} ({{ s.shr_with.email }}) &middot; {{ s.get_perm_display }}</span>
+            {% url 'unshr' s.id as u %}{% include 'files/_act.html' with url=u label='Revocar acceso' cls='danger' %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">Nadie más tiene acceso todavía.</p>
+    {% endif %}
+</div>
+
+<div class="panel">
+    <h2 class="panel-title">Enlace público</h2>
+    {% if lnk %}
+    <p class="muted">Cualquier persona con este enlace puede descargar el archivo, sin iniciar sesión.</p>
+    <input type="text" readonly value="{{ pub_url }}" onclick="this.select();" style="width:100%; margin-bottom:0.8rem;">
+    {% url 'pub_off' fl.id as u %}{% include 'files/_act.html' with url=u label='Desactivar enlace' cls='danger' %}
+    {% else %}
+    <p class="muted">Este archivo no tiene un enlace público activo.{% if n_rev %} ({{ n_rev }} enlace(s) revocado(s) anteriormente.){% endif %}</p>
+    <form method="post" action="{% url 'pub_on' fl.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn primary">Generar enlace público</button>
+    </form>
+    {% endif %}
+</div>
+
+<p><a href="{% url 'dash' %}" class="btn">Volver</a></p>
+{% endblock %}
